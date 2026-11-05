@@ -37,7 +37,7 @@ export default function HomePage() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg text-white tracking-tight">ColdReach CRM</h1>
+              <h1 className="font-bold text-lg text-white tracking-tight">AI Email coldreach</h1>
               <span className="text-[10px] font-semibold bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2 py-0.5 rounded-full">
                 SaaS Platform
               </span>
@@ -288,7 +288,7 @@ export default function HomePage() {
         {/* Footer */}
         <footer className="border-t border-slate-800/80 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div>
-            <span>© 2026 ColdReach CRM. All rights reserved.</span>
+            <span>© 2026 AI Email coldreach. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-4 text-slate-400">
             <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
@@ -301,7 +301,7 @@ export default function HomePage() {
               Pricing & Access
             </button>
             <span className="text-slate-700">•</span>
-            <span className="text-slate-400">WhatsApp Support: 0300-1234567</span>
+            <span className="text-slate-400">WhatsApp Support: +923017642273</span>
           </div>
         </footer>
       </main>

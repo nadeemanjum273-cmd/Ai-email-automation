@@ -110,10 +110,10 @@ export default function LoginPage() {
             </div>
           </Link>
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Log In to ColdReach
+            Log In to AI Email coldreach
           </h2>
           <p className="text-xs text-slate-400">
-            ColdReach Outreach CRM • Automated & Multi-Tenant Access
+            AI Email coldreach • Automated & Multi-Tenant Access
           </p>
         </div>
 
@@ -234,7 +234,7 @@ export default function LoginPage() {
           </Link>
           <div className="flex items-center gap-1 text-slate-400">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Support: +92-300-1234567</span>
+            <span>Support: +923017642273</span>
           </div>
         </div>
       </div>

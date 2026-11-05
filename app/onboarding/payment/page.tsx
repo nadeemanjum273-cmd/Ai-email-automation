@@ -6,7 +6,8 @@ import {
   CreditCard, 
   Smartphone, 
   Building2, 
-  CheckCircle2 
+  CheckCircle2,
+  HelpCircle 
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
@@ -17,16 +18,11 @@ export default function SubmitPaymentProofPage() {
   const supabase = createClient();
 
   const [method, setMethod] = useState<PaymentMethod>('JazzCash');
-  const [transactionId, setTransactionId] = useState('');
   const [screenshotUrl, setScreenshotUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transactionId.trim()) {
-      toast.error('Please enter the Transaction ID (TID).');
-      return;
-    }
     if (!screenshotUrl.trim()) {
       toast.error('Please provide a screenshot proof URL.');
       return;
@@ -34,6 +30,7 @@ export default function SubmitPaymentProofPage() {
 
     setLoading(true);
     const toastId = toast.loading('Submitting payment proof...');
+    const generatedTid = 'TID-' + Math.floor(10000000 + Math.random() * 90000000);
 
     try {
       const {
@@ -51,7 +48,8 @@ export default function SubmitPaymentProofPage() {
         amount: 3000,
         currency: 'PKR',
         payment_method: method,
-        transaction_id: transactionId.trim(),
+        sender_number: '03017642273',
+        transaction_id: generatedTid,
         screenshot_url: screenshotUrl.trim(),
         status: 'pending' as const,
       });
@@ -82,7 +80,7 @@ export default function SubmitPaymentProofPage() {
             Submit Payment Proof
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Standard Plan: <strong>PKR 3,000 / Month</strong> (50 Daily / 1,500 Monthly Emails)
+            AI Email coldreach • <strong>PKR 3,000 / Month</strong> (50 Daily / 1,500 Monthly Emails)
           </p>
         </div>
 
@@ -97,16 +95,16 @@ export default function SubmitPaymentProofPage() {
               <div className="flex items-center gap-1.5 text-amber-400 font-bold">
                 <Smartphone className="w-3.5 h-3.5" /> JazzCash
               </div>
-              <div className="font-mono text-sm font-semibold mt-1">0300-1234567</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">ColdReach SaaS</div>
+              <div className="font-mono text-sm font-semibold mt-1">0301-7642273</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">Title: Nadeem Anjum</div>
             </div>
 
             <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
               <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
                 <Smartphone className="w-3.5 h-3.5" /> Easypaisa
               </div>
-              <div className="font-mono text-sm font-semibold mt-1">0345-9876543</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">ColdReach SaaS</div>
+              <div className="font-mono text-sm font-semibold mt-1">0301-7642273</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">Title: Nadeem Anjum</div>
             </div>
 
             <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
@@ -114,7 +112,7 @@ export default function SubmitPaymentProofPage() {
                 <Building2 className="w-3.5 h-3.5" /> Meezan Bank
               </div>
               <div className="font-mono text-xs font-semibold mt-1">01020304050607</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">Title: ColdReach</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">Title: Nadeem Anjum</div>
             </div>
           </div>
         </div>
@@ -147,24 +145,6 @@ export default function SubmitPaymentProofPage() {
             </div>
           </div>
 
-          {/* TID Input */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-              Transaction ID (TID)
-            </label>
-            <input
-              type="text"
-              required
-              value={transactionId}
-              onChange={(e) => setTransactionId(e.target.value)}
-              placeholder="e.g. 1293847501"
-              className="w-full text-sm font-mono p-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900"
-            />
-            <p className="text-[11px] text-slate-400 mt-1">
-              Found on the SMS receipt or banking app confirmation screen.
-            </p>
-          </div>
-
           {/* Screenshot URL Input */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
@@ -175,18 +155,18 @@ export default function SubmitPaymentProofPage() {
               required
               value={screenshotUrl}
               onChange={(e) => setScreenshotUrl(e.target.value)}
-              placeholder="https://images.unsplash.com/... or Supabase storage URL"
+              placeholder="https://... or Supabase storage image URL"
               className="w-full text-sm p-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900"
             />
             <p className="text-[11px] text-slate-400 mt-1">
-              Provide a direct image URL or upload to Supabase storage / image host.
+              Provide a direct image URL or receipt link of your transfer.
             </p>
           </div>
 
           <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 text-xs text-sky-800 flex items-start gap-2">
             <CheckCircle2 className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
             <span>
-              Once submitted, our admin team verifies the TID against bank records. Your daily 50 and monthly 1,500 email limits will be unlocked immediately upon approval.
+              Once submitted, our admin team verifies the proof. Your daily 50 and monthly 1,500 email limits will be unlocked immediately upon approval.
             </span>
           </div>
 
@@ -197,6 +177,10 @@ export default function SubmitPaymentProofPage() {
           >
             {loading ? 'Submitting Proof...' : 'Submit Payment Proof for Verification'}
           </button>
+
+          <div className="text-center text-xs text-slate-500 pt-2 flex items-center justify-center gap-1">
+            <HelpCircle className="w-3.5 h-3.5" /> Questions? WhatsApp: <strong>+923017642273</strong>
+          </div>
         </form>
       </div>
     </div>

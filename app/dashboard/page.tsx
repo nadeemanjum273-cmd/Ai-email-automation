@@ -135,7 +135,7 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-slate-800 text-base leading-tight">ColdReach CRM</h1>
+              <h1 className="font-bold text-slate-800 text-base leading-tight">AI Email coldreach</h1>
               <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full">
                 Active Tenant
               </span>

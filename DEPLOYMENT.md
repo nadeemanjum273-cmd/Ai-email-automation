@@ -1,6 +1,6 @@
 # 🚀 Production Deployment & Operations Guide
 
-This guide provides end-to-end instructions for deploying the **ColdReach AI Cold Outreach CRM SaaS** to **Vercel** and connecting it with **Supabase**, **Google Cloud OAuth (Gmail & Sheets API)**, and **Google Gemini AI**.
+This guide provides end-to-end instructions for deploying the **AI Email coldreach** SaaS to **Vercel** and connecting it with **Supabase**, **Google Cloud OAuth (Gmail & Sheets API)**, and **Google Gemini AI**.
 
 ---
 
@@ -85,7 +85,7 @@ To enable your tenants to connect their genuine Gmail accounts and Google Sheets
    - Search for **Google Sheets API** and click **Enable**.
 3. Configure the **OAuth Consent Screen**:
    - User Type: **External**
-   - App Name: `ColdReach Outreach CRM`
+   - App Name: `AI Email coldreach`
    - User Support Email: your email
    - Scopes:
      - `https://www.googleapis.com/auth/gmail.send`

@@ -39,8 +39,6 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
 
   // Step 2 & 3: Payment details & proof
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('JazzCash');
-  const [senderNumber, setSenderNumber] = useState('');
-  const [transactionId, setTransactionId] = useState('');
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
   const [screenshotFileName, setScreenshotFileName] = useState<string>('');
 
@@ -100,14 +98,6 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
   };
 
   const validateStep3 = () => {
-    if (!senderNumber.trim()) {
-      toast.error('Please enter your sender mobile or account number.');
-      return false;
-    }
-    if (!transactionId.trim()) {
-      toast.error('Transaction ID (TID) is required.');
-      return false;
-    }
     if (!screenshotPreview) {
       toast.error('Please upload your payment receipt screenshot.');
       return false;
@@ -131,6 +121,9 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
     setIsSubmitting(true);
     const toastId = toast.loading('Submitting access request and payment proof...');
 
+    // Auto-generate unique transaction reference ID and sender number from phone
+    const generatedTid = 'TID-' + Math.floor(10000000 + Math.random() * 90000000);
+
     try {
       const res = await submitAccessRequest({
         fullName,
@@ -138,8 +131,8 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
         email,
         password,
         paymentMethod,
-        senderNumber,
-        transactionId,
+        senderNumber: phone || '0301-7642273',
+        transactionId: generatedTid,
         screenshotBase64: screenshotPreview || undefined,
         screenshotFileName,
       });
@@ -166,8 +159,6 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
     setPhone('');
     setEmail('');
     setPassword('');
-    setSenderNumber('');
-    setTransactionId('');
     setScreenshotPreview(null);
     setScreenshotFileName('');
     onClose();
@@ -187,7 +178,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
             <div>
               <h2 className="text-lg font-bold leading-tight">Request Platform Access</h2>
               <p className="text-xs text-sky-300 font-sans mt-0.5">
-                ColdReach CRM • PKR 3,000 / Month Standard Plan
+                AI Email coldreach • PKR 3,000 / Month Standard Plan
               </p>
             </div>
           </div>
@@ -223,7 +214,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
               <div className="bg-sky-50 border border-sky-200 rounded-xl p-3.5 text-xs text-sky-900 flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  Enter your accurate details and WhatsApp number so our admin team can verify your payment proof and activate your account immediately.
+                  Enter your contact details so our admin team can verify your payment receipt screenshot and activate your account immediately. Contact: <strong>+923017642273</strong>.
                 </p>
               </div>
 
@@ -236,7 +227,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Muhammad Bilal (Growth Leads)"
+                    placeholder="e.g. Nadeem Anjum (Growth Leads)"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900"
@@ -253,7 +244,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   <input
                     type="tel"
                     required
-                    placeholder="03001234567"
+                    placeholder="03017642273"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900 font-mono"
@@ -270,7 +261,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   <input
                     type="email"
                     required
-                    placeholder="bilal@youragency.pk"
+                    placeholder="you@youragency.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-9 pr-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900 font-mono"
@@ -308,7 +299,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
             </div>
           )}
 
-          {/* STEP 2: Local Payment Accounts Display */}
+          {/* STEP 2: Payment Accounts Display */}
           {currentStep === 2 && (
             <div className="space-y-4">
               {/* Fee Announcement Badge */}
@@ -323,7 +314,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
               </div>
 
               <p className="text-xs text-slate-600 leading-relaxed">
-                Please transfer <strong>PKR 3,000</strong> to any of the verified accounts below and keep the confirmation receipt/SMS:
+                Please transfer <strong>PKR 3,000</strong> to any of the verified accounts below and take a screenshot of your transfer:
               </p>
 
               {/* Payment Accounts Cards */}
@@ -337,14 +328,14 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                     <div>
                       <div className="text-xs font-bold text-amber-900">JazzCash</div>
                       <div className="font-mono text-sm font-bold text-slate-900 mt-0.5">
-                        0300-1234567
+                        0301-7642273
                       </div>
-                      <div className="text-[11px] text-slate-600">Account Title: Muhammad Bilal</div>
+                      <div className="text-[11px] text-slate-600">Account Title: Nadeem Anjum</div>
                     </div>
                   </div>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard('03001234567', 'JazzCash Number')}
+                    onClick={() => copyToClipboard('03017642273', 'JazzCash Number')}
                     className="p-2 text-xs font-semibold bg-white hover:bg-amber-100 text-amber-800 border border-amber-300 rounded-lg transition-colors flex items-center gap-1 font-sans"
                   >
                     {copiedKey === 'JazzCash Number' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -361,14 +352,14 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                     <div>
                       <div className="text-xs font-bold text-emerald-900">Easypaisa</div>
                       <div className="font-mono text-sm font-bold text-slate-900 mt-0.5">
-                        0345-9876543
+                        0301-7642273
                       </div>
-                      <div className="text-[11px] text-slate-600">Account Title: Muhammad Bilal</div>
+                      <div className="text-[11px] text-slate-600">Account Title: Nadeem Anjum</div>
                     </div>
                   </div>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard('03459876543', 'Easypaisa Number')}
+                    onClick={() => copyToClipboard('03017642273', 'Easypaisa Number')}
                     className="p-2 text-xs font-semibold bg-white hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg transition-colors flex items-center gap-1 font-sans"
                   >
                     {copiedKey === 'Easypaisa Number' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -387,7 +378,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                       <div className="font-mono text-xs font-bold text-slate-900 mt-0.5">
                         PK64MEZN0001020304050607
                       </div>
-                      <div className="text-[11px] text-slate-600">Account Title: Muhammad Bilal</div>
+                      <div className="text-[11px] text-slate-600">Account Title: Nadeem Anjum</div>
                     </div>
                   </div>
                   <button
@@ -415,7 +406,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   onClick={handleNextStep}
                   className="w-2/3 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-sky-600 hover:bg-sky-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <span>I Have Paid, Submit Proof</span>
+                  <span>I Have Paid, Upload Screenshot</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -448,42 +439,6 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                 </div>
               </div>
 
-              {/* Sender Mobile / Account Number */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Sender Mobile / Account Number *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="0301-XXXXXXX or bank account number"
-                  value={senderNumber}
-                  onChange={(e) => setSenderNumber(e.target.value)}
-                  className="w-full p-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900 font-mono"
-                />
-                <p className="text-[11px] text-slate-400 mt-1">
-                  The account number or phone number from which you transferred PKR 3,000.
-                </p>
-              </div>
-
-              {/* Transaction ID (TID) */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Transaction ID (TID) *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. 1293847501"
-                  value={transactionId}
-                  onChange={(e) => setTransactionId(e.target.value)}
-                  className="w-full p-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white text-slate-900 font-mono font-bold"
-                />
-                <p className="text-[11px] text-slate-400 mt-1">
-                  Unique reference number from your SMS confirmation or banking receipt.
-                </p>
-              </div>
-
               {/* Screenshot Upload with preview */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
@@ -501,13 +456,13 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                 {!screenshotPreview ? (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="border-2 border-dashed border-slate-300 hover:border-sky-500 bg-slate-50 hover:bg-sky-50/50 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2"
+                    className="border-2 border-dashed border-slate-300 hover:border-sky-500 bg-slate-50 hover:bg-sky-50/50 rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2"
                   >
-                    <div className="h-10 w-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center">
-                      <Upload className="w-5 h-5" />
+                    <div className="h-12 w-12 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center">
+                      <Upload className="w-6 h-6" />
                     </div>
                     <div className="text-xs font-bold text-slate-700">
-                      Click here to upload payment receipt screenshot
+                      Click here to upload your payment receipt screenshot
                     </div>
                     <div className="text-[11px] text-slate-400 font-sans">
                       PNG, JPG, JPEG (Max 5MB)
@@ -520,14 +475,14 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                       <img
                         src={screenshotPreview}
                         alt="Proof Preview"
-                        className="h-14 w-14 object-cover rounded-lg border border-slate-300"
+                        className="h-16 w-16 object-cover rounded-lg border border-slate-300"
                       />
                       <div>
                         <div className="text-xs font-bold text-slate-800 line-clamp-1">
                           {screenshotFileName || 'payment_proof.jpg'}
                         </div>
                         <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
-                          <Check className="w-3 h-3" /> Image attached
+                          <Check className="w-3 h-3" /> Screenshot attached
                         </span>
                       </div>
                     </div>
@@ -588,7 +543,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   Request Submitted Successfully!
                 </h3>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-                  Your payment verification request and proof have been received. You will be able to log in once our admin approves your payment.
+                  Your payment receipt screenshot has been received. You will be able to log in once our admin approves your verification.
                 </p>
               </div>
 
@@ -596,10 +551,6 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                 <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
                   <span className="text-slate-500">Email:</span>
                   <span className="font-mono font-bold text-slate-900">{email}</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-200/60 pb-1.5">
-                  <span className="text-slate-500">Transaction ID:</span>
-                  <span className="font-mono font-bold text-slate-900">{transactionId}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Status:</span>

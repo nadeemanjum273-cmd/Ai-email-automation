@@ -198,3 +198,4 @@ export function QuotasTable({ initialQuotas }: QuotasTableProps) {
     </div>
   );
 }
+

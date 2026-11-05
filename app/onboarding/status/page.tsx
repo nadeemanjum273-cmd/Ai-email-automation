@@ -62,7 +62,7 @@ export default async function OnboardingStatusPage() {
             Account Activation & Quota Status
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            ColdReach Multi-Tenant CRM SaaS • PKR 3,000 / month
+            AI Email coldreach • PKR 3,000 / month
           </p>
         </div>
 
@@ -154,23 +154,23 @@ export default async function OnboardingStatusPage() {
               <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-4 h-4 text-amber-600" />
-                  <span><strong>JazzCash:</strong> 0300-1234567</span>
+                  <span><strong>JazzCash:</strong> 0301-7642273</span>
                 </div>
-                <span className="text-[11px] text-slate-400">Title: ColdReach SaaS</span>
+                <span className="text-[11px] text-slate-400">Title: Nadeem Anjum</span>
               </div>
               <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-4 h-4 text-emerald-600" />
-                  <span><strong>Easypaisa:</strong> 0345-9876543</span>
+                  <span><strong>Easypaisa:</strong> 0301-7642273</span>
                 </div>
-                <span className="text-[11px] text-slate-400">Title: ColdReach SaaS</span>
+                <span className="text-[11px] text-slate-400">Title: Nadeem Anjum</span>
               </div>
               <div className="p-2.5 bg-slate-50 rounded-lg border border-slate-200 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Building2 className="w-4 h-4 text-blue-600" />
                   <span><strong>Meezan Bank:</strong> 01020304050607</span>
                 </div>
-                <span className="text-[11px] text-slate-400">IBAN: PK64MEZN0001020304050607</span>
+                <span className="text-[11px] text-slate-400">Title: Nadeem Anjum (IBAN: PK64MEZN0001020304050607)</span>
               </div>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default async function OnboardingStatusPage() {
           {/* Help & Logout */}
           <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
             <div className="flex items-center gap-1 text-slate-500">
-              <HelpCircle className="w-4 h-4" /> Need urgent assistance? WhatsApp +92-300-1234567
+              <HelpCircle className="w-4 h-4" /> Need urgent assistance? WhatsApp +923017642273
             </div>
             <Link href="/login" className="text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1">
               <LogOut className="w-3.5 h-3.5" /> Sign Out

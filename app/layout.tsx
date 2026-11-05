@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: 'Outreach CRM - Multi-Tenant Cold Email SaaS',
-  description: 'Enterprise cold outreach platform with automated quota management and client verification.',
+  title: 'AI Email coldreach - Multi-Tenant Cold Email SaaS',
+  description: 'AI Email coldreach platform with automated quota management and client verification.',
 };
 
 export default function RootLayout({

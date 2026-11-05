@@ -1,4 +1,4 @@
-# ColdReach CRM - Multi-Tenant Cold Outreach SaaS (Phase 1)
+# AI Email coldreach - Multi-Tenant Cold Outreach SaaS
 
 Phase 1 of our multi-tenant cold email outreach SaaS built using **Next.js 14+ (App Router)**, **TypeScript**, **Tailwind CSS**, **Lucide-React**, and **@supabase/ssr**.
 
