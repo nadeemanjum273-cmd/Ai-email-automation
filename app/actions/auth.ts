@@ -143,10 +143,14 @@ export async function submitAccessRequest(
 
     if (createError) {
       // If user already registered, check status
-      if (createError.message.toLowerCase().includes('already registered')) {
+      const isAlreadyRegistered =
+        (createError as { code?: string }).code === 'email_exists' ||
+        createError.message.toLowerCase().includes('already');
+
+      if (isAlreadyRegistered) {
         const { data: existingProfile } = await adminSupabase
           .from('profiles')
-          .select('id, status')
+          .select('id, status, role')
           .eq('email', email)
           .maybeSingle();
 
@@ -154,14 +158,14 @@ export async function submitAccessRequest(
           if (existingProfile.status === 'active') {
             return {
               success: false,
-              error: 'An active account already exists with this email address. Please sign in.',
+              error: `An active ${existingProfile.role === 'admin' ? 'administrator' : 'client'} account already exists for ${email}. Please sign in directly at /login.`,
             };
           }
           userId = existingProfile.id;
         } else {
           return {
             success: false,
-            error: 'This email is already registered. Please sign in or use another email.',
+            error: 'This email is already registered. Please sign in or use a demo client email (e.g. client@example.com).',
           };
         }
       } else {
@@ -182,29 +186,32 @@ export async function submitAccessRequest(
         id: userId,
         email,
         full_name: fullName,
-        phone,
+        phone_number: phone,
         role: 'client',
         status: 'pending',
-        updated_at: new Date().toISOString(),
-      });
+      } as any);
 
     if (profileUpsertError) {
       console.error('Profile upsert error:', profileUpsertError);
     }
 
     // 6. Insert record into payment_requests
+    const methodFormatted =
+      paymentMethod === 'Bank Transfer'
+        ? 'bank_transfer'
+        : paymentMethod.toLowerCase();
+
     const { error: paymentInsertError } = await adminSupabase
       .from('payment_requests')
       .insert({
         user_id: userId,
-        amount: 3000,
-        currency: 'PKR',
-        payment_method: paymentMethod,
-        sender_number: senderNumber,
+        amount_paid: 3000,
+        payment_method: methodFormatted,
+        account_number_used: senderNumber,
         transaction_id: transactionId,
-        screenshot_url: finalScreenshotUrl,
+        proof_screenshot_url: finalScreenshotUrl,
         status: 'pending',
-      });
+      } as any);
 
     if (paymentInsertError) {
       console.error('Payment request insert error:', paymentInsertError);

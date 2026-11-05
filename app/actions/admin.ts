@@ -49,28 +49,14 @@ export async function getPendingRequests(): Promise<{
     const { data, error } = await adminSupabase
       .from('payment_requests')
       .select(`
-        id,
-        user_id,
-        amount,
-        currency,
-        payment_method,
-        sender_number,
-        transaction_id,
-        screenshot_url,
-        status,
-        admin_notes,
-        reviewed_by,
-        reviewed_at,
-        created_at,
-        updated_at,
+        *,
         profiles (
           id,
           full_name,
           email,
           role,
           status,
-          created_at,
-          updated_at
+          created_at
         )
       `)
       .eq('status', 'pending')
@@ -81,7 +67,43 @@ export async function getPendingRequests(): Promise<{
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: (data as unknown as PaymentRequest[]) ?? [] };
+    const mapped = (data || []).map((row: any) => ({
+      id: row.id,
+      user_id: row.user_id,
+      amount: row.amount_paid ?? row.amount ?? 3000,
+      currency: 'PKR',
+      payment_method:
+        row.payment_method === 'bank_transfer'
+          ? 'Bank Transfer'
+          : row.payment_method === 'jazzcash'
+          ? 'JazzCash'
+          : row.payment_method === 'easypaisa'
+          ? 'Easypaisa'
+          : row.payment_method,
+      sender_number: row.account_number_used ?? row.sender_number ?? row.profiles?.phone_number ?? 'N/A',
+      transaction_id: row.transaction_id,
+      screenshot_url: row.proof_screenshot_url ?? row.screenshot_url ?? '',
+      status: row.status,
+      admin_notes: row.admin_notes,
+      reviewed_by: row.reviewed_by,
+      reviewed_at: row.reviewed_at,
+      created_at: row.created_at,
+      updated_at: row.created_at,
+      profiles: row.profiles
+        ? {
+            id: row.profiles.id,
+            full_name: row.profiles.full_name,
+            email: row.profiles.email,
+            phone: row.profiles.phone_number ?? row.profiles.phone ?? null,
+            role: row.profiles.role,
+            status: row.profiles.status,
+            created_at: row.profiles.created_at,
+            updated_at: row.profiles.created_at,
+          }
+        : null,
+    }));
+
+    return { success: true, data: mapped as unknown as PaymentRequest[] };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to fetch pending requests';
     return { success: false, error: message };
@@ -110,11 +132,9 @@ export async function approveUserPayment(
     const { error: paymentError } = await adminSupabase
       .from('payment_requests')
       .update({
-        status: 'approved' as const,
-        reviewed_by: adminUser.id,
+        status: 'approved',
         reviewed_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      })
+      } as any)
       .eq('id', paymentId);
 
     if (paymentError) {
@@ -126,9 +146,8 @@ export async function approveUserPayment(
     const { error: profileError } = await adminSupabase
       .from('profiles')
       .update({
-        status: 'active' as const,
-        updated_at: now.toISOString(),
-      })
+        status: 'active',
+      } as any)
       .eq('id', userId);
 
     if (profileError) {
@@ -141,21 +160,17 @@ export async function approveUserPayment(
       .from('subscriptions')
       .select('id')
       .eq('user_id', userId)
-      .returns<Pick<Subscription, 'id'>[]>()
       .maybeSingle();
 
     if (existingSub) {
       const { error: subError } = await adminSupabase
         .from('subscriptions')
         .update({
-          plan_name: 'Standard PKR 3,000/Month',
-          status: 'active' as const,
-          daily_email_limit: 50,
-          monthly_email_limit: 1500,
-          starts_at: now.toISOString(),
+          plan_name: 'Starter Monthly 3000',
+          daily_limit: 50,
+          monthly_limit: 1500,
           expires_at: expiresAt.toISOString(),
-          updated_at: now.toISOString(),
-        })
+        } as any)
         .eq('user_id', userId);
 
       if (subError) {
@@ -167,15 +182,14 @@ export async function approveUserPayment(
         .from('subscriptions')
         .insert({
           user_id: userId,
-          plan_name: 'Standard PKR 3,000/Month',
-          status: 'active' as const,
-          daily_email_limit: 50,
-          monthly_email_limit: 1500,
-          daily_emails_sent: 0,
-          monthly_emails_sent: 0,
-          starts_at: now.toISOString(),
+          plan_name: 'Starter Monthly 3000',
+          price_pkr: 3000,
+          daily_limit: 50,
+          monthly_limit: 1500,
+          daily_sent: 0,
+          monthly_sent: 0,
           expires_at: expiresAt.toISOString(),
-        });
+        } as any);
 
       if (insertSubError) {
         console.error('Failed to create new subscription:', insertSubError);
@@ -210,12 +224,10 @@ export async function rejectUserPayment(
     const { error } = await adminSupabase
       .from('payment_requests')
       .update({
-        status: 'rejected' as const,
+        status: 'rejected',
         admin_notes: reason,
-        reviewed_by: adminUser.id,
         reviewed_at: now.toISOString(),
-        updated_at: now.toISOString(),
-      })
+      } as any)
       .eq('id', paymentId);
 
     if (error) {
@@ -271,13 +283,8 @@ export async function updateTenantStatus(
     await verifyAdminAuth();
     const adminSupabase = createAdminClient();
 
-    const updatePayload: {
-      status: 'active' | 'suspended' | 'pending';
-      role?: 'client' | 'admin';
-      updated_at: string;
-    } = {
+    const updatePayload: Record<string, unknown> = {
       status,
-      updated_at: new Date().toISOString(),
     };
     if (role) {
       updatePayload.role = role;
@@ -285,7 +292,7 @@ export async function updateTenantStatus(
 
     const { error } = await adminSupabase
       .from('profiles')
-      .update(updatePayload)
+      .update(updatePayload as any)
       .eq('id', userId);
 
     if (error) {
@@ -330,7 +337,21 @@ export async function getAllQuotas(): Promise<{
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: (data as unknown as (Subscription & { profiles?: Profile | null })[]) || [] };
+    const mapped = (data || []).map((row: any) => ({
+      ...row,
+      daily_email_limit: row.daily_limit ?? row.daily_email_limit ?? 50,
+      monthly_email_limit: row.monthly_limit ?? row.monthly_email_limit ?? 1500,
+      daily_emails_sent: row.daily_sent ?? row.daily_emails_sent ?? 0,
+      monthly_emails_sent: row.monthly_sent ?? row.monthly_emails_sent ?? 0,
+      profiles: row.profiles
+        ? {
+            ...row.profiles,
+            phone: row.profiles.phone_number ?? row.profiles.phone ?? null,
+          }
+        : null,
+    }));
+
+    return { success: true, data: mapped as unknown as (Subscription & { profiles?: Profile | null })[] };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : 'Failed to fetch quotas' };
   }
@@ -350,10 +371,9 @@ export async function resetDailyQuota(
     const { error } = await adminSupabase
       .from('subscriptions')
       .update({
-        daily_emails_sent: 0,
+        daily_sent: 0,
         last_reset_date: todayStr,
-        updated_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('id', subscriptionId);
 
     if (error) {

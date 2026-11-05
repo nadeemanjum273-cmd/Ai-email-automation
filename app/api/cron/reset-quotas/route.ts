@@ -29,10 +29,10 @@ export async function GET(request: Request) {
       const { error: resetErr } = await adminSupabase
         .from('subscriptions')
         .update({
+          daily_sent: 0,
           daily_emails_sent: 0,
           last_reset_date: todayStr,
-          updated_at: nowIso,
-        })
+        } as any)
         .in('id', ids);
 
       if (resetErr) {
@@ -55,8 +55,7 @@ export async function GET(request: Request) {
         .from('subscriptions')
         .update({
           status: 'expired',
-          updated_at: nowIso,
-        })
+        } as any)
         .in('id', expiredIds);
       expiredCount = expiredIds.length;
     }

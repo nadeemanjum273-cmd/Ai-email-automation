@@ -41,15 +41,21 @@ export async function validateUserQuota(userId: string): Promise<QuotaValidation
     }
 
     // 2. Check subscription active status
+    const subAny = sub as any;
+    const dailyLimit = subAny.daily_limit ?? subAny.daily_email_limit ?? 50;
+    const monthlyLimit = subAny.monthly_limit ?? subAny.monthly_email_limit ?? 1500;
+    let dailySent = subAny.daily_sent ?? subAny.daily_emails_sent ?? 0;
+    const monthlySent = subAny.monthly_sent ?? subAny.monthly_emails_sent ?? 0;
+
     if (sub.status !== 'active') {
       return {
         canSend: false,
         remainingDaily: 0,
         remainingMonthly: 0,
-        dailyLimit: sub.daily_email_limit || 50,
-        monthlyLimit: sub.monthly_email_limit || 1500,
-        dailySent: sub.daily_emails_sent || 0,
-        monthlySent: sub.monthly_emails_sent || 0,
+        dailyLimit,
+        monthlyLimit,
+        dailySent,
+        monthlySent,
         error: 'Your subscription plan is currently not active.',
       };
     }
@@ -58,38 +64,33 @@ export async function validateUserQuota(userId: string): Promise<QuotaValidation
     if (sub.expires_at && new Date(sub.expires_at) < new Date()) {
       await adminSupabase
         .from('subscriptions')
-        .update({ status: 'expired' })
+        .update({ status: 'expired' } as any)
         .eq('id', sub.id);
 
       return {
         canSend: false,
         remainingDaily: 0,
         remainingMonthly: 0,
-        dailyLimit: sub.daily_email_limit || 50,
-        monthlyLimit: sub.monthly_email_limit || 1500,
-        dailySent: sub.daily_emails_sent || 0,
-        monthlySent: sub.monthly_emails_sent || 0,
+        dailyLimit,
+        monthlyLimit,
+        dailySent,
+        monthlySent,
         error: 'Your 30-day subscription has expired. Please renew your plan.',
       };
     }
 
-    let dailySent = sub.daily_emails_sent || 0;
-    const monthlySent = sub.monthly_emails_sent || 0;
-    const dailyLimit = sub.daily_email_limit || 50;
-    const monthlyLimit = sub.monthly_email_limit || 1500;
-
     // 4. Daily Quota Reset Logic
-    const lastResetDate = sub.last_reset_date || sub.updated_at?.split('T')[0];
+    const lastResetDate = sub.last_reset_date;
 
     if (!lastResetDate || lastResetDate < todayStr) {
       dailySent = 0;
       await adminSupabase
         .from('subscriptions')
         .update({
+          daily_sent: 0,
           daily_emails_sent: 0,
           last_reset_date: todayStr,
-          updated_at: new Date().toISOString(),
-        })
+        } as any)
         .eq('id', sub.id);
     }
 
@@ -139,24 +140,27 @@ export async function incrementQuotaUsage(
 
     const { data: sub } = await adminSupabase
       .from('subscriptions')
-      .select('id, daily_emails_sent, monthly_emails_sent, last_reset_date')
+      .select('*')
       .eq('user_id', userId)
       .maybeSingle();
 
     if (!sub) return { success: false, error: 'Subscription not found' };
 
+    const subAny = sub as any;
     const isNewDay = !sub.last_reset_date || sub.last_reset_date < todayStr;
-    const currentDaily = isNewDay ? 0 : sub.daily_emails_sent || 0;
-    const currentMonthly = sub.monthly_emails_sent || 0;
+    const currentDaily = isNewDay ? 0 : subAny.daily_sent ?? subAny.daily_emails_sent ?? 0;
+    const currentMonthly = subAny.monthly_sent ?? subAny.monthly_emails_sent ?? 0;
+
+    const newDaily = currentDaily + emailsSentCount;
+    const newMonthly = currentMonthly + emailsSentCount;
 
     const { error } = await adminSupabase
       .from('subscriptions')
       .update({
-        daily_emails_sent: currentDaily + emailsSentCount,
-        monthly_emails_sent: currentMonthly + emailsSentCount,
+        daily_sent: newDaily,
+        monthly_sent: newMonthly,
         last_reset_date: todayStr,
-        updated_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('id', sub.id);
 
     if (error) return { success: false, error: error.message };
