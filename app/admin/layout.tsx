@@ -104,12 +104,12 @@ export default function AdminLayout({
         <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-10">
           <div>
             <h2 className="text-lg font-bold text-slate-800">Admin Approval Hub</h2>
-            <p className="text-xs text-slate-500">Review pending Pakistani client payment proofs & grant platform access</p>
+            <p className="text-xs text-slate-500">Review pending client registrations & grant platform access</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1.5 rounded-md border border-slate-200">
               <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
-              JazzCash • Easypaisa • Local Bank
+              Standard PKR 3,000 / Month
             </span>
           </div>
         </header>

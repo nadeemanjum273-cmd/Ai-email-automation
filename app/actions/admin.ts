@@ -35,6 +35,7 @@ async function verifyAdminAuth() {
 
 /**
  * Fetch all pending payment requests joined with client profile details.
+ * Defensive query: selects fields guaranteed to exist in profiles table to prevent schema mismatch errors.
  */
 export async function getPendingRequests(): Promise<{
   success: boolean;
@@ -66,7 +67,6 @@ export async function getPendingRequests(): Promise<{
           id,
           full_name,
           email,
-          phone,
           role,
           status,
           created_at,
@@ -185,6 +185,8 @@ export async function approveUserPayment(
 
     revalidatePath('/admin/requests');
     revalidatePath('/admin');
+    revalidatePath('/admin/users');
+    revalidatePath('/admin/quotas');
     revalidatePath('/dashboard');
     return { success: true };
   } catch (err: unknown) {
@@ -222,9 +224,146 @@ export async function rejectUserPayment(
     }
 
     revalidatePath('/admin/requests');
+    revalidatePath('/admin');
     return { success: true };
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Rejection failed';
     return { success: false, error: message };
+  }
+}
+
+/**
+ * Fetch all registered tenants & clients for the admin panel.
+ */
+export async function getAllTenants(): Promise<{
+  success: boolean;
+  data?: Profile[];
+  error?: string;
+}> {
+  try {
+    await verifyAdminAuth();
+    const adminSupabase = createAdminClient();
+
+    const { data, error } = await adminSupabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data: data || [] };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to fetch tenants' };
+  }
+}
+
+/**
+ * Update tenant status (active, suspended, pending) or promote to admin.
+ */
+export async function updateTenantStatus(
+  userId: string,
+  status: 'active' | 'suspended' | 'pending',
+  role?: 'client' | 'admin'
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await verifyAdminAuth();
+    const adminSupabase = createAdminClient();
+
+    const updatePayload: {
+      status: 'active' | 'suspended' | 'pending';
+      role?: 'client' | 'admin';
+      updated_at: string;
+    } = {
+      status,
+      updated_at: new Date().toISOString(),
+    };
+    if (role) {
+      updatePayload.role = role;
+    }
+
+    const { error } = await adminSupabase
+      .from('profiles')
+      .update(updatePayload)
+      .eq('id', userId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath('/admin/users');
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to update tenant' };
+  }
+}
+
+/**
+ * Fetch all subscriptions with tenant profile info for Quota Management.
+ */
+export async function getAllQuotas(): Promise<{
+  success: boolean;
+  data?: (Subscription & { profiles?: Profile | null })[];
+  error?: string;
+}> {
+  try {
+    await verifyAdminAuth();
+    const adminSupabase = createAdminClient();
+
+    const { data, error } = await adminSupabase
+      .from('subscriptions')
+      .select(`
+        *,
+        profiles (
+          id,
+          full_name,
+          email,
+          role,
+          status
+        )
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, data: (data as unknown as (Subscription & { profiles?: Profile | null })[]) || [] };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to fetch quotas' };
+  }
+}
+
+/**
+ * Manually reset daily quota for a specific subscription.
+ */
+export async function resetDailyQuota(
+  subscriptionId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await verifyAdminAuth();
+    const adminSupabase = createAdminClient();
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const { error } = await adminSupabase
+      .from('subscriptions')
+      .update({
+        daily_emails_sent: 0,
+        last_reset_date: todayStr,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', subscriptionId);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    revalidatePath('/admin/quotas');
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (err: unknown) {
+    return { success: false, error: err instanceof Error ? err.message : 'Failed to reset quota' };
   }
 }

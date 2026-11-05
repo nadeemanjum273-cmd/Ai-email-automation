@@ -159,3 +159,4 @@ npx tsx scripts/test-pipeline.ts --fast
 # Full production mode (realistic 45–90s randomized delay):
 npx tsx scripts/test-pipeline.ts
 ```
+

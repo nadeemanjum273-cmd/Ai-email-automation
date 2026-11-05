@@ -130,3 +130,4 @@ seedAdmin().catch((err) => {
   console.error('Fatal admin provisioning error:', err);
   process.exit(1);
 });
+

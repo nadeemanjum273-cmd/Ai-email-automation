@@ -17,7 +17,7 @@ export default async function AdminRequestsPage() {
             Pending Payment Approvals
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Pakistani payment methods verification (JazzCash, Easypaisa, Bank Transfer). Approving a client instantly unlocks their daily 50 / monthly 1,500 email quota.
+            Client registration and verification requests. Approving a client instantly unlocks their daily 50 / monthly 1,500 email quota.
           </p>
         </div>
         <div className="flex items-center gap-2">
