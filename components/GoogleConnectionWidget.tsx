@@ -39,7 +39,7 @@ export function GoogleConnectionWidget({ isConnected, connectedEmail }: GoogleCo
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:border-sky-300 cursor-pointer">
       <div className="flex items-start justify-between">
         <div>
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider font-sans">

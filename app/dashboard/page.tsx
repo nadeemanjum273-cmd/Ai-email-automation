@@ -230,9 +230,9 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
         </div>
 
         {/* 1. Live Quota Widgets Grid (Top Section) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Card 1: Daily Quota Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:border-sky-300 cursor-pointer">
             <div className="flex justify-between items-start">
               <div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -266,7 +266,7 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
           </div>
 
           {/* Card 2: Monthly Quota Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4 transition-all duration-300 transform hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl hover:border-indigo-300 cursor-pointer">
             <div className="flex justify-between items-start">
               <div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -298,35 +298,7 @@ export default async function DashboardPage({ searchParams }: DashboardProps) {
             </div>
           </div>
 
-          {/* Card 3: Plan & Expiry Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Plan & Subscription
-                </span>
-                <div className="text-xl font-black text-slate-900 mt-1">
-                  Starter 3000 PKR
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full">
-                Active
-              </span>
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 space-y-1 text-xs">
-              <div className="text-slate-500 flex justify-between">
-                <span>Billing Cycle:</span>
-                <span className="font-bold text-slate-800">30 Days</span>
-              </div>
-              <div className="text-slate-500 flex justify-between">
-                <span>Renewal Date:</span>
-                <span className="font-bold text-sky-600">{formattedExpiry}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Google Connection Card */}
+          {/* Card 3: Google Connection Card */}
           <GoogleConnectionWidget
             isConnected={isGoogleConnected}
             connectedEmail={connectedGoogleEmail}

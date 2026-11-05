@@ -37,23 +37,30 @@ export default function LoginPage() {
     const toastId = toast.loading('Authenticating credentials...');
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      // 10-second safety timeout so login never hangs indefinitely
+      const loginPromise = supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
       });
 
+      const timeoutPromise = new Promise<{ data: { user: null; session: null }; error: { message: string } }>((_, reject) =>
+        setTimeout(() => reject(new Error('Connection timed out. Please check your internet connection.')), 10000)
+      );
+
+      const { data, error } = await Promise.race([loginPromise, timeoutPromise]);
+
       if (error) {
-        toast.error(
-          `Login failed: ${error.message === 'Invalid login credentials' ? 'Invalid email or password' : error.message}`,
-          { id: toastId }
-        );
-        setLoading(false);
+        const errorText =
+          error.message === 'Invalid login credentials'
+            ? 'Invalid email or password. Please double-check your email spelling and password.'
+            : error.message;
+
+        toast.error(`Login failed: ${errorText}`, { id: toastId, duration: 6000 });
         return;
       }
 
       if (!data.user) {
         toast.error('User account record not found.', { id: toastId });
-        setLoading(false);
         return;
       }
 
@@ -70,7 +77,6 @@ export default function LoginPage() {
         const pendingMsg = 'Your account is currently pending admin verification. Once verified, you will be granted access.';
         setPendingNotice(pendingMsg);
         toast.info(pendingMsg, { id: toastId, duration: 8000 });
-        setLoading(false);
         return;
       }
 
@@ -78,20 +84,22 @@ export default function LoginPage() {
         const suspendedMsg = 'Your account has been suspended. Please contact admin support.';
         setSuspendedNotice(suspendedMsg);
         toast.error(suspendedMsg, { id: toastId, duration: 8000 });
-        setLoading(false);
         return;
       }
 
       // If active
       toast.success('Welcome back! Login successful.', { id: toastId });
-      
+      router.refresh();
+
       if (profile?.role === 'admin') {
         router.push('/admin/requests');
       } else {
         router.push('/dashboard');
       }
-    } catch {
-      toast.error('Network connection error. Please try again.', { id: toastId });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Network connection error. Please try again.';
+      toast.error(msg, { id: toastId });
+    } finally {
       setLoading(false);
     }
   };
