@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/reset-quotas",
+      "schedule": "0 0 * * *"
+    }
+  ],
+  "functions": {
+    "app/api/campaign/start/route.ts": {
+      "maxDuration": 300,
+      "memory": 1024
+    },
+    "app/api/cron/reset-quotas/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}
