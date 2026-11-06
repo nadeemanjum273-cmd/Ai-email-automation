@@ -42,7 +42,7 @@ export default function HomePage() {
                 SaaS Platform
               </span>
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">Automated Cold Email Outreach for Local Clients</p>
+            <p className="text-xs text-slate-400 hidden sm:block">Automated Cold Email Outreach for Clients</p>
           </div>
         </div>
 
@@ -71,7 +71,7 @@ export default function HomePage() {
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight sm:leading-snug text-slate-100">
             Hyper-Personalized Automated Cold Emails for{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-teal-300">
-              Local Clients
+              Your Clients
             </span>
           </h1>
 
@@ -96,20 +96,6 @@ export default function HomePage() {
             >
               <span>Already registered? Sign In</span>
             </Link>
-          </div>
-
-          {/* Payment Providers Bar */}
-          <div className="pt-6 flex flex-wrap items-center justify-center gap-3 text-xs text-slate-400">
-            <span>Seamless manual payment methods:</span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-amber-500/30 text-amber-300">
-              <Smartphone className="w-3.5 h-3.5 text-amber-400" /> JazzCash
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-emerald-500/30 text-emerald-300">
-              <Smartphone className="w-3.5 h-3.5 text-emerald-400" /> Easypaisa
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-blue-500/30 text-blue-300">
-              <Building2 className="w-3.5 h-3.5 text-blue-400" /> Meezan Bank Transfer
-            </span>
           </div>
         </section>
 
@@ -165,7 +151,7 @@ export default function HomePage() {
               <div className="text-xs font-bold text-indigo-400">Step 4: Inbox Delivery</div>
               <h4 className="text-sm font-bold text-white">50 Daily / 1,500 Monthly</h4>
               <p className="text-xs text-slate-400 leading-relaxed">
-                High-deliverability emails landed right in the primary inbox, converting local prospects into booked calls.
+                High-deliverability emails landed right in the primary inbox, converting prospects into booked calls.
               </p>
             </div>
           </div>
@@ -219,7 +205,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span><strong>Local Payment Methods:</strong> Pay easily via JazzCash, Easypaisa, or Local Bank Transfer</span>
+                <span><strong>Payment Methods:</strong> Pay easily via JazzCash, Easypaisa, or Bank Transfer</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />

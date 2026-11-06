@@ -163,7 +163,7 @@ export async function POST(req: Request) {
 
           const item = leads[idx];
           const prospectName = item.lead.name || 'Prospect';
-          const prospectCompany = item.lead.company || item.lead.niche || 'Local Business';
+          const prospectCompany = item.lead.company || item.lead.niche || 'Target Business';
           const recipientEmail = item.lead.email || '';
 
           // Step 1: Personalizing Email with Gemini AI

@@ -34,7 +34,7 @@ export function CampaignSetup({ isGoogleConnected, remainingDailyQuota }: Campai
   const [columnStatus, setColumnStatus] = useState('');
 
   // Step C: Subject & Body Templates
-  const [campaignTitle, setCampaignTitle] = useState('Local Business Outreach Campaign');
+  const [campaignTitle, setCampaignTitle] = useState('Client Outreach Campaign');
   const [subjectTemplate, setSubjectTemplate] = useState('Quick question regarding {{Company}}');
   const [bodyTemplate, setBodyTemplate] = useState(
     'Hi {{Name}},\n\nI was looking through {{Company}} and noticed your focus on {{Niche}}. We recently helped several similar businesses increase client acquisition with personalized outreach.\n\nWould you be open to a quick 5-minute chat sometime this week?\n\nBest regards,\nGrowth Outreach Team'

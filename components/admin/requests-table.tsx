@@ -234,7 +234,7 @@ export function RequestsTable({ initialRequests }: RequestsTableProps) {
             <option value="all">All Payment Methods</option>
             <option value="jazzcash">JazzCash</option>
             <option value="easypaisa">Easypaisa</option>
-            <option value="bank transfer">Local Bank Transfer</option>
+            <option value="bank transfer">Bank Transfer</option>
           </select>
         </div>
       </div>
