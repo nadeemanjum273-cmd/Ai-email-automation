@@ -23,50 +23,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-sky-500 selection:text-white">
-      {/* Top Announcement Bar */}
-      <div className="bg-gradient-to-r from-sky-900 via-indigo-900 to-slate-900 border-b border-sky-800/40 px-4 py-2 text-center text-xs text-sky-200 flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-        <span>New Feature: Real-time Google Sheets Sync & 50 Daily Spam-Protected Emails via Gmail.</span>
-      </div>
-
-      {/* Modern Header */}
-      <header className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between border-b border-slate-800/80">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-sky-400 to-indigo-500 flex items-center justify-center font-black text-white text-lg shadow-lg">
-            CR
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg text-white tracking-tight">AI Email coldreach</h1>
-              <span className="text-[10px] font-semibold bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2 py-0.5 rounded-full">
-                SaaS Platform
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 hidden sm:block">Automated Cold Email Outreach for Clients</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 transition-all shadow-md shadow-sky-500/20"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Request Access</span>
-          </button>
-        </div>
-      </header>
-
       {/* Main Hero Section */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-20 space-y-16">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-28 pb-20 space-y-16">
         <section className="text-center space-y-6 max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-400/20">
-            <Zap className="w-3.5 h-3.5" />
-            <span>100% Primary Inbox Delivery • Zero Spam • Live Google Sheets Sync</span>
-          </div>
-
           {/* Catchy Title */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight sm:leading-snug text-slate-100">
             Hyper-Personalized Automated Cold Emails for{' '}
