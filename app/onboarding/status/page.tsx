@@ -190,7 +190,7 @@ export default async function OnboardingStatusPage() {
           {/* Help & Logout */}
           <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500">
             <div className="flex items-center gap-1 text-slate-500">
-              <HelpCircle className="w-4 h-4" /> Need urgent assistance? WhatsApp +923017642273
+              <HelpCircle className="w-4 h-4" /> Need urgent assistance? WhatsApp +923077978277
             </div>
             <Link href="/login" className="text-slate-600 hover:text-slate-900 font-medium flex items-center gap-1">
               <LogOut className="w-3.5 h-3.5" /> Sign Out

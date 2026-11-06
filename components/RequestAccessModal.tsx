@@ -214,7 +214,7 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
               <div className="bg-sky-50 border border-sky-200 rounded-xl p-3.5 text-xs text-sky-900 flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                 <p className="leading-relaxed">
-                  Enter your contact details so our admin team can verify your payment receipt screenshot and activate your account immediately. Contact: <strong>+923017642273</strong>.
+                  Enter your contact details so our admin team can verify your payment receipt screenshot and activate your account immediately. Contact: <strong>+923077978277</strong>.
                 </p>
               </div>
 

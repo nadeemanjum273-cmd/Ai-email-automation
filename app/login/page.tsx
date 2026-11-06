@@ -242,7 +242,7 @@ export default function LoginPage() {
           </Link>
           <div className="flex items-center gap-1 text-slate-400">
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Support: +923017642273</span>
+            <span>Support: +923077978277</span>
           </div>
         </div>
       </div>

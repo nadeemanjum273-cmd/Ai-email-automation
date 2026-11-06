@@ -179,7 +179,7 @@ export default function SubmitPaymentProofPage() {
           </button>
 
           <div className="text-center text-xs text-slate-500 pt-2 flex items-center justify-center gap-1">
-            <HelpCircle className="w-3.5 h-3.5" /> Questions? WhatsApp: <strong>+923017642273</strong>
+            <HelpCircle className="w-3.5 h-3.5" /> Questions? WhatsApp: <strong>+923077978277</strong>
           </div>
         </form>
       </div>

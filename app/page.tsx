@@ -47,12 +47,6 @@ export default function HomePage() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/login"
-            className="px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all"
-          >
-            Client Sign In
-          </Link>
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
@@ -301,7 +295,7 @@ export default function HomePage() {
               Pricing & Access
             </button>
             <span className="text-slate-700">•</span>
-            <span className="text-slate-400">WhatsApp Support: +923017642273</span>
+            <span className="text-slate-400">WhatsApp Support: +923077978277</span>
           </div>
         </footer>
       </main>
