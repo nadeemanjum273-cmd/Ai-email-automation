@@ -367,27 +367,27 @@ export function RequestAccessModal({ isOpen, onClose }: RequestAccessModalProps)
                   </button>
                 </div>
 
-                {/* Bank Transfer (Meezan Bank) */}
+                {/* Bank Transfer (Faysal Bank) */}
                 <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3.5 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
                       <Building2 className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-blue-900">Meezan Bank Transfer</div>
+                      <div className="text-xs font-bold text-blue-900">Faysal Bank (RAAST / IBAN)</div>
                       <div className="font-mono text-xs font-bold text-slate-900 mt-0.5">
-                        PK64MEZN0001020304050607
+                        PK33FAYS3810525000001140
                       </div>
                       <div className="text-[11px] text-slate-600">Account Title: Nadeem Anjum</div>
                     </div>
                   </div>
                   <button
                     type="button"
-                    onClick={() => copyToClipboard('PK64MEZN0001020304050607', 'Meezan Bank IBAN')}
+                    onClick={() => copyToClipboard('PK33FAYS3810525000001140', 'Faysal Bank IBAN')}
                     className="p-2 text-xs font-semibold bg-white hover:bg-blue-100 text-blue-800 border border-blue-300 rounded-lg transition-colors flex items-center gap-1 font-sans"
                   >
-                    {copiedKey === 'Meezan Bank IBAN' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedKey === 'Meezan Bank IBAN' ? 'Copied' : 'Copy'}</span>
+                    {copiedKey === 'Faysal Bank IBAN' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedKey === 'Faysal Bank IBAN' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
               </div>

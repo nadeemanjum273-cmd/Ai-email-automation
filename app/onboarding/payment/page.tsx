@@ -113,9 +113,9 @@ export default function SubmitPaymentProofPage() {
 
             <div className="bg-slate-800 p-3 rounded-xl border border-slate-700">
               <div className="flex items-center gap-1.5 text-sky-400 font-bold">
-                <Building2 className="w-3.5 h-3.5" /> Meezan Bank
+                <Building2 className="w-3.5 h-3.5" /> Faysal Bank (RAAST)
               </div>
-              <div className="font-mono text-xs font-semibold mt-1">01020304050607</div>
+              <div className="font-mono text-xs font-semibold mt-1">PK33FAYS3810525000001140</div>
               <div className="text-[11px] text-slate-400 mt-0.5">Title: Nadeem Anjum</div>
             </div>
           </div>
