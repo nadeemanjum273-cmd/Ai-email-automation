@@ -43,15 +43,19 @@ export default function SubmitPaymentProofPage() {
         return;
       }
 
-      const { error } = await supabase.from('payment_requests').insert({
+      const methodFormatted =
+        method === 'Bank Transfer'
+          ? 'bank_transfer'
+          : method.toLowerCase();
+
+      const { error } = await (supabase as any).from('payment_requests').insert({
         user_id: user.id,
-        amount: 3000,
-        currency: 'PKR',
-        payment_method: method,
-        sender_number: '03017642273',
+        amount_paid: 3000,
+        payment_method: methodFormatted,
+        account_number_used: '03017642273',
         transaction_id: generatedTid,
-        screenshot_url: screenshotUrl.trim(),
-        status: 'pending' as const,
+        proof_screenshot_url: screenshotUrl.trim(),
+        status: 'pending',
       });
 
       if (error) {
