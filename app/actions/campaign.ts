@@ -213,8 +213,7 @@ export async function disconnectGoogle(): Promise<{ success: boolean; error?: st
         is_connected: false,
         access_token: '',
         refresh_token: null,
-        updated_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('user_id', user.id);
 
     revalidatePath('/dashboard');

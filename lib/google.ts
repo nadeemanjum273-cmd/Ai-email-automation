@@ -49,14 +49,7 @@ export async function getAuthorizedClientForUser(userId: string) {
 
   // Listen for automatic token refresh event
   oauth2Client.on('tokens', async (tokens) => {
-    const updatePayload: {
-      access_token?: string;
-      refresh_token?: string | null;
-      token_expires_at?: string | null;
-      updated_at: string;
-    } = {
-      updated_at: new Date().toISOString(),
-    };
+    const updatePayload: Record<string, any> = {};
     if (tokens.access_token) {
       updatePayload.access_token = tokens.access_token;
     }
@@ -69,7 +62,7 @@ export async function getAuthorizedClientForUser(userId: string) {
 
     await adminSupabase
       .from('google_connections')
-      .update(updatePayload)
+      .update(updatePayload as any)
       .eq('user_id', userId);
   });
 
@@ -90,8 +83,7 @@ export async function getAuthorizedClientForUser(userId: string) {
           token_expires_at: credentials.expiry_date
             ? new Date(credentials.expiry_date).toISOString()
             : connection.token_expires_at,
-          updated_at: new Date().toISOString(),
-        })
+        } as any)
         .eq('user_id', userId);
     } catch (refreshErr) {
       console.error('Failed to refresh Google token:', refreshErr);

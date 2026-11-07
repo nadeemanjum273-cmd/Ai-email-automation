@@ -64,8 +64,7 @@ export async function DELETE(request: NextRequest) {
         is_connected: false,
         access_token: '',
         refresh_token: null,
-        updated_at: new Date().toISOString(),
-      })
+      } as any)
       .eq('user_id', user.id);
 
     if (error) {

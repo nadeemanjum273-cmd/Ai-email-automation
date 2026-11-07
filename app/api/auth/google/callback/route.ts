@@ -78,37 +78,43 @@ export async function GET(request: NextRequest) {
 
     // Preserve existing refresh token if Google didn't send a new one
     let finalRefreshToken = tokens.refresh_token || null;
-    if (!finalRefreshToken) {
-      const { data: existingConn } = await adminSupabase
-        .from('google_connections')
-        .select('refresh_token')
-        .eq('user_id', targetUserId)
-        .maybeSingle();
+    const { data: existingConn } = await adminSupabase
+      .from('google_connections')
+      .select('id, refresh_token')
+      .eq('user_id', targetUserId)
+      .maybeSingle();
 
-      if (existingConn?.refresh_token) {
-        finalRefreshToken = existingConn.refresh_token;
-      }
+    if (existingConn?.refresh_token && !finalRefreshToken) {
+      finalRefreshToken = existingConn.refresh_token;
     }
 
-    const { error: upsertError } = await adminSupabase
-      .from('google_connections')
-      .upsert(
-        {
-          user_id: targetUserId,
-          google_email: googleEmail,
-          access_token: tokens.access_token,
-          refresh_token: finalRefreshToken,
-          token_expires_at: tokens.expiry_date
-            ? new Date(tokens.expiry_date).toISOString()
-            : null,
-          is_connected: true,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id' }
-      );
+    const connPayload: Record<string, any> = {
+      user_id: targetUserId,
+      google_email: googleEmail,
+      access_token: tokens.access_token,
+      refresh_token: finalRefreshToken,
+      token_expires_at: tokens.expiry_date
+        ? new Date(tokens.expiry_date).toISOString()
+        : null,
+      is_connected: true,
+    };
+
+    let upsertError: any = null;
+    if (existingConn?.id) {
+      const { error } = await adminSupabase
+        .from('google_connections')
+        .update(connPayload as any)
+        .eq('id', existingConn.id);
+      upsertError = error;
+    } else {
+      const { error } = await adminSupabase
+        .from('google_connections')
+        .insert(connPayload as any);
+      upsertError = error;
+    }
 
     if (upsertError) {
-      console.error('Error upserting google_connections:', upsertError);
+      console.error('Error saving google_connections:', upsertError);
       dashboardUrl.searchParams.set('error', `Failed to save Google connection: ${upsertError.message}`);
       return NextResponse.redirect(dashboardUrl);
     }
